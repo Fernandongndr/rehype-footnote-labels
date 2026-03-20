@@ -1,6 +1,6 @@
 {
   "name": "rehype-footnote-labels",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Rehype plugin to replace numeric footnote references with their original label text (e.g. 1 → KPI)",
   "type": "module",
   "private": false,

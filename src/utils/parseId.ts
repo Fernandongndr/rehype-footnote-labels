@@ -13,3 +13,18 @@ export function parseFootnoteRefId(id: unknown): string | null {
   const match = /^(?:user-content-)?fnref-(.+?)(?:-\d+)?$/.exec(id);
   return match ? match[1].toLowerCase() : null;
 }
+
+/**
+ * Extracts the normalized footnote identifier from a definition list item's id attribute.
+ *
+ * remark-gfm produces ids like:
+ *   - "fn-kpi"
+ *
+ * Returns the lowercased label key, e.g. "kpi".
+ * Returns null if the id does not match the expected pattern.
+ */
+export function parseFootnoteDefId(id: unknown): string | null {
+  if (typeof id !== 'string') return null;
+  const match = /^(?:user-content-)?fn-(.+)$/.exec(id);
+  return match ? match[1].toLowerCase() : null;
+}

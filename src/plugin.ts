@@ -2,7 +2,7 @@ import { visit } from 'unist-util-visit';
 import type { Root, Element, Text } from 'hast';
 import type { Plugin } from 'unified';
 import { extractLabelsFromSource } from './utils/extractLabels.js';
-import { parseFootnoteRefId } from './utils/parseId.js';
+import { parseFootnoteRefId, parseFootnoteDefId } from './utils/parseId.js';
 
 export interface Options {
   /**
@@ -73,6 +73,29 @@ const rehypeFootnoteLabels: Plugin<[Options?], Root> = (options = {}) => {
 
       const textNode: Text = { type: 'text', value: displayLabel };
       node.children = [textNode];
+    });
+
+    // 4. Walk the HAST and prefix each footnote definition list item with its label.
+    visit(tree, 'element', (node: Element) => {
+      if (node.tagName !== 'li') return;
+
+      const key = parseFootnoteDefId(node.properties?.id);
+      if (key === null) return;
+
+      const originalLabel = labelMap.get(key);
+      if (originalLabel === undefined) return;
+
+      const displayLabel = format ? format(originalLabel) : originalLabel;
+
+      // Find the first <p> child and prepend "Label: " to its content.
+      const firstP = node.children.find(
+        (child): child is Element =>
+          child.type === 'element' && (child as Element).tagName === 'p',
+      );
+      if (!firstP) return;
+
+      const prefixNode: Text = { type: 'text', value: displayLabel + ': ' };
+      firstP.children.unshift(prefixNode);
     });
   };
 };

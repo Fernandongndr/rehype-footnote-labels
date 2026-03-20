@@ -85,4 +85,39 @@ describe('rehype-footnote-labels', () => {
     expect(html).toContain('href="https://example.com"');
     expect(html).toContain('>KPI<');
   });
+
+  // Footnote definition list item labeling
+  it('prefixes footnote definition list item with label', async () => {
+    const md = 'See[^KPI].\n\n[^KPI]: Key Performance Indicator';
+    const html = await process(md);
+    expect(html).toContain('KPI: Key Performance Indicator');
+  });
+
+  it('prefixes multiple footnote definitions each with their own label', async () => {
+    const md =
+      'A[^KPI] and B[^ROI].\n\n[^KPI]: Key Performance Indicator\n\n[^ROI]: Return on Investment';
+    const html = await process(md);
+    expect(html).toContain('KPI: Key Performance Indicator');
+    expect(html).toContain('ROI: Return on Investment');
+  });
+
+  it('applies format option to footnote definition list item prefix', async () => {
+    const md = 'See[^KPI].\n\n[^KPI]: Key Performance Indicator';
+    const html = await process(md, (label) => `[${label}]`);
+    expect(html).toContain('[KPI]: Key Performance Indicator');
+  });
+
+  it('does not prefix footnote definitions when no source is provided', async () => {
+    const md = 'See[^KPI].\n\n[^KPI]: Key Performance Indicator';
+    const result = await unified()
+      .use(remarkParse)
+      .use(remarkGfm)
+      .use(remarkRehype)
+      .use(rehypeFootnoteLabels) // no options
+      .use(rehypeStringify)
+      .process(md);
+    const html = String(result);
+    // Without source, no label prefix is added
+    expect(html).not.toContain('KPI: Key Performance Indicator');
+  });
 });
