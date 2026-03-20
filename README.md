@@ -22,9 +22,9 @@ The default HTML output from `remark-gfm` + `remark-rehype` is:
 <p>Revenue grew<sup><a id="fnref-kpi" data-footnote-ref href="#fn-kpi">1</a></sup> last quarter.</p>
 ...
 <section data-footnotes>
-  <ol>
+  <ul>
     <li id="fn-kpi"><p>Key Performance Indicator ...</p></li>
-  </ol>
+  </ul>
 </section>
 ```
 
@@ -34,9 +34,9 @@ The visible `1` loses all meaning in context, and the definition list gives no i
 <p>Revenue grew<sup><a id="fnref-kpi" data-footnote-ref href="#fn-kpi">KPI</a></sup> last quarter.</p>
 ...
 <section data-footnotes>
-  <ol>
+  <ul>
     <li id="fn-kpi"><p>KPI: Key Performance Indicator ...</p></li>
-  </ol>
+  </ul>
 </section>
 ```
 
@@ -110,7 +110,7 @@ An optional function applied to the resolved label before it is written into the
 |---|---|---|
 | Inline ref `[^KPI]` | `<a ...>1</a>` | `<a ...>KPI</a>` |
 | Inline ref `[^ROI]` | `<a ...>2</a>` | `<a ...>ROI</a>` |
-| Definition `[^KPI]: ...` | `<li><p>Key Performance Indicator</p></li>` | `<li><p>KPI: Key Performance Indicator</p></li>` |
+| Definition `[^KPI]: ...` | `<ol><li><p>Key Performance Indicator</p></li></ol>` | `<ul><li><p>KPI: Key Performance Indicator</p></li></ul>` |
 
 ---
 

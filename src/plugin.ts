@@ -75,7 +75,18 @@ const rehypeFootnoteLabels: Plugin<[Options?], Root> = (options = {}) => {
       node.children = [textNode];
     });
 
-    // 4. Walk the HAST and prefix each footnote definition list item with its label.
+    // 4. Convert the footnote <ol> to <ul> (labels make numbering redundant).
+    visit(tree, 'element', (node: Element) => {
+      if (node.tagName !== 'section' || node.properties?.dataFootnotes !== true) return;
+
+      const ol = node.children.find(
+        (child): child is Element =>
+          child.type === 'element' && (child as Element).tagName === 'ol',
+      );
+      if (ol) ol.tagName = 'ul';
+    });
+
+    // 5. Walk the HAST and prefix each footnote definition list item with its label.
     visit(tree, 'element', (node: Element) => {
       if (node.tagName !== 'li') return;
 

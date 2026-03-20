@@ -42,7 +42,7 @@ describe('rehype-footnote-labels', () => {
     const md =
       'First[^KPI] and second[^KPI] mention.\n\n[^KPI]: Key Performance Indicator';
     const html = await process(md);
-    const matches = [...html.matchAll(/>KPI</g)];
+    const matches = Array.from(html.matchAll(/>KPI</g));
     // Both references should use the label
     expect(matches.length).toBeGreaterThanOrEqual(2);
   });
@@ -84,6 +84,15 @@ describe('rehype-footnote-labels', () => {
     const html = await process(md);
     expect(html).toContain('href="https://example.com"');
     expect(html).toContain('>KPI<');
+  });
+
+  it('converts the footnote ordered list to an unordered list', async () => {
+    const md = 'See[^KPI].\n\n[^KPI]: Key Performance Indicator';
+    const html = await process(md);
+    expect(html).toContain('<ul');
+    // The footnotes section should not contain an <ol>
+    const footnotesSection = html.match(/<section[^>]*data-footnotes[^>]*>([\s\S]*?)<\/section>/)?.[1] ?? '';
+    expect(footnotesSection).not.toContain('<ol');
   });
 
   // Footnote definition list item labeling
