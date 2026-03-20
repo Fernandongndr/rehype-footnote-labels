@@ -1,0 +1,56 @@
+{
+  "name": "rehype-footnote-labels",
+  "version": "1.0.0",
+  "description": "Rehype plugin to replace numeric footnote references with their original label text (e.g. 1 → KPI)",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm run test"
+  },
+  "keywords": [
+    "rehype",
+    "unified",
+    "footnote",
+    "plugin",
+    "remark",
+    "markdown",
+    "hast"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "unified": ">=11.0.0"
+  },
+  "dependencies": {
+    "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "rehype-parse": "^9.0.0",
+    "rehype-stringify": "^10.0.0",
+    "remark-gfm": "^4.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "unified": "^11.0.0",
+    "vitest": "^1.0.0"
+  }
+}
